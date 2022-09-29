@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['name', 'user_id'];
     /**
      * Get the user data for the category/(inverse)
      */
