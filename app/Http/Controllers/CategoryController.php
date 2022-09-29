@@ -20,4 +20,14 @@ class CategoryController extends Controller
             'data' => ['category' => $category]
         ], 201);
     }
+
+    public function delete(Request $request)
+    {
+        Category::where('id', $request->id)->delete();
+
+        return response()->json([
+            'error' => false,
+            'message' => 'Category Deleted Successfully',
+        ], 201);
+    }
 }

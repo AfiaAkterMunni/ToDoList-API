@@ -20,3 +20,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/categories/store', [CategoryController::class, 'store']);
+Route::get('/categories/delete', [CategoryController::class, 'delete']);
