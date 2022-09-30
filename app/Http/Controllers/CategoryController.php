@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
+use App\Models\Task;
 use Exception;
 use Illuminate\Http\Request;
+
+use function GuzzleHttp\Promise\task;
 
 class CategoryController extends Controller
 {
@@ -30,6 +33,25 @@ class CategoryController extends Controller
         }
     }
 
+    public function select(Request $request)
+    {
+        try {
+            $categoryIds = Task::whereDate('date',$request->date)->get('category_id');
+            $selectedCategories = Category::whereIn('id', $categoryIds)->get();
+            return response()->json([
+                'error' => false,
+                'message' => 'Selected Category of '.$request->date,
+                'data' => ['selectedCategories' => $selectedCategories]
+            ], 200);
+        }
+        catch (Exception $e) {
+            $status = $e->getCode() > 500 ? 500 : $e->getCode();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], $status);
+        }
+    }
 
     public function store(StoreCategoryRequest $request)
     {
