@@ -9,6 +9,28 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function index()
+    {
+        try {
+
+            $userId = 1;
+            $categories = Category::where('user_id', $userId)->get();
+            return response()->json([
+                'error' => false,
+                'message' => 'All Category',
+                'data' => ['categories' => $categories]
+            ], 200);
+        }
+        catch (Exception $e) {
+            $status = $e->getCode() > 500 ? 500 : $e->getCode();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], $status);
+        }
+    }
+
+
     public function store(StoreCategoryRequest $request)
     {
         try{
@@ -23,10 +45,11 @@ class CategoryController extends Controller
             ], 201);
         }
         catch (Exception $e) {
+            $status = $e->getCode() > 500 ? 500 : $e->getCode();
             return response()->json([
                 'error' => true,
                 'message' => $e->getMessage()
-            ], $e->getCode());
+            ], $status);
         }
     }
 
@@ -48,10 +71,11 @@ class CategoryController extends Controller
             ], 200);
         }
         catch (Exception $e) {
+            $status = $e->getCode() > 500 ? 500 : $e->getCode();
             return response()->json([
                 'error' => true,
                 'message' => $e->getMessage(),
-            ], $e->getCode());
+            ], $status);
         }
     }
 }
