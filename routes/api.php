@@ -32,4 +32,5 @@ Route::delete('/categories/delete/{id}', [CategoryController::class, 'delete']);
 //---------------------------------------------------------//
 Route::post('/tasks/store', [TaskController::class, 'store']);
 Route::put('/tasks/update/{id}', [TaskController::class, 'update']);
+Route::put('/tasks/statusupdate/{id}', [TaskController::class, 'statusUpdate']);
 Route::delete('/tasks/delete/{id}', [TaskController::class, 'delete']);

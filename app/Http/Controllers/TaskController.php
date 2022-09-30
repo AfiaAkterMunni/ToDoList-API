@@ -64,6 +64,32 @@ class TaskController extends Controller
         }
     }
 
+    public function statusUpdate(UpdateStatusRequest $request, $id)
+    {
+        try{
+            $task = Task::find($id);
+            if ($task) {
+                $task->update([
+                    'status' => $request->input('status')
+                ]);
+            }
+            else {
+                throw new Exception("Not Found!", 404);
+            }
+            return response()->json([
+                'error' => false,
+                'message' => 'Task Status Updated Successfully'
+            ], 200);
+        }
+        catch (Exception $e) {
+            $status = $e->getCode() > 500 ? 500 : $e->getCode();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], $status);
+        }
+    }
+
     public function delete($id)
     {
         try {
