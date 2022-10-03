@@ -2,15 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DateRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateStatusRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Category;
 use App\Models\Task;
 use Exception;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    public function index(DateRequest $request)
+    {
+        try {
+
+            $userId = 1;
+            $tasks = Category::with(['tasks' => function($query) use($request,$userId){
+                                $query->where('date', $request->date)
+                                    ->where('user_id', $userId);
+                            }])
+                            ->get();
+            // $tasks = Task::whereDate('date', $request->date)
+            //             ->where('user_id', $userId)
+            //             ->groupBy('user_id')
+            //             ->get();
+            // dd($tasks);
+            // $categories = Category::where('user_id', $userId)->get();
+            return response()->json([
+                'error' => false,
+                'message' => 'All Task Of '.$request->date,
+                'data' => ['categories' => $tasks]
+            ], 200);
+        }
+        catch (Exception $e) {
+            $status = $e->getCode() > 500 ? 500 : $e->getCode();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], $status);
+        }
+    }
     public function store(StoreTaskRequest $request)
     {
         try{

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DateRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use App\Models\Task;
@@ -33,7 +34,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function select(Request $request)
+    public function select(DateRequest $request)
     {
         try {
             $categoryIds = Task::whereDate('date',$request->date)->get('category_id');
