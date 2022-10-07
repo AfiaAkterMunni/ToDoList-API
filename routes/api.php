@@ -31,25 +31,25 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function(){
 
     Route::get('/me', [AuthController::class, 'me']);
+
+    //---------------------------------------------------------//
+    //-------------------------Categories----------------------//
+    //---------------------------------------------------------//
+
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/selected', [CategoryController::class, 'select']);
+    Route::post('/categories/store', [CategoryController::class, 'store']);
+    Route::delete('/categories/delete/{id}', [CategoryController::class, 'delete']);
+
+
+    //---------------------------------------------------------//
+    //----------------------------Tasks------------------------//
+    //---------------------------------------------------------//
+
+    Route::get('/tasks', [TaskController::class, 'index']);
+    Route::post('/tasks/store', [TaskController::class, 'store']);
+    Route::put('/tasks/update/{id}', [TaskController::class, 'update']);
+    Route::put('/tasks/statusupdate/{id}', [TaskController::class, 'statusUpdate']);
+    Route::delete('/tasks/delete/{id}', [TaskController::class, 'delete']);
+
 });
-
-//---------------------------------------------------------//
-//-------------------------Categories----------------------//
-//---------------------------------------------------------//
-
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/selected', [CategoryController::class, 'select']);
-Route::post('/categories/store', [CategoryController::class, 'store']);
-Route::delete('/categories/delete/{id}', [CategoryController::class, 'delete']);
-
-
-//---------------------------------------------------------//
-//----------------------------Tasks------------------------//
-//---------------------------------------------------------//
-
-Route::get('/tasks', [TaskController::class, 'index']);
-Route::post('/tasks/store', [TaskController::class, 'store']);
-Route::put('/tasks/update/{id}', [TaskController::class, 'update']);
-Route::put('/tasks/statusupdate/{id}', [TaskController::class, 'statusUpdate']);
-Route::delete('/tasks/delete/{id}', [TaskController::class, 'delete']);
-

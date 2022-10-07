@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Task;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -17,7 +18,7 @@ class TaskController extends Controller
     {
         try {
 
-            $userId = 1;
+            $userId = Auth::id();
             $tasks = Category::with(['tasks' => function($query) use($request,$userId){
                                 $query->where('date', $request->date)
                                     ->where('user_id', $userId);
@@ -48,7 +49,7 @@ class TaskController extends Controller
         try{
             $task = Task::create([
                 'name' => $request->input('name'),
-                'user_id' => 1,
+                'user_id' => Auth::id(),
                 'category_id' => $request->input('category_id'),
                 'date' => $request->input('date'),
                 'status' => false

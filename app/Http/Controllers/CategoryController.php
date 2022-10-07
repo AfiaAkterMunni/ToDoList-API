@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Task;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use function GuzzleHttp\Promise\task;
 
@@ -17,7 +18,7 @@ class CategoryController extends Controller
     {
         try {
 
-            $userId = 1;
+            $userId = Auth::id();
             $categories = Category::where('user_id', $userId)->get();
             return response()->json([
                 'error' => false,
@@ -59,7 +60,7 @@ class CategoryController extends Controller
         try{
             $category = Category::create([
                 'name' => $request->input('name'),
-                'user_id' => 1
+                'user_id' => Auth::id()
             ]);
             return response()->json([
                 'error' => false,
