@@ -13,11 +13,19 @@ class AuthController extends Controller
     public function register(StoreUserRequest $request)
     {
         try{
-            $user = User::create([
+            $data = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password'))
-            ]);
+            ];
+            if($request->image)
+            {
+                $newImageName = rand().'.'.$request->image->getClientOriginalExtension();
+                $request->image->move('uploads/', $newImageName);
+                $data['image'] = $newImageName;
+            }
+            $user = User::create($data);
+
             if($user)
             {
                 $token = $user->createToken('accessToken')->accessToken;
