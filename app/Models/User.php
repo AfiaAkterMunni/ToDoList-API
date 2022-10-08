@@ -56,4 +56,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+
+    public function getImageAttribute($val)
+    {
+        if($val)
+        {
+            return asset('uploads/' . $val);
+        }
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -94,5 +95,51 @@ class AuthController extends Controller
                 'message' => $e->getMessage()
             ], $status);
         }
+    }
+
+    public function update(UpdateProfileRequest $request)
+    {
+        try {
+
+            $user = Auth::user();
+            if ($user) {
+
+                $data = [
+                    'name' => $request->input('name'),
+                    'email' => $request->input('email')
+                ];
+                if($request->image)
+                {
+                    if($user->image)
+                    {
+                        //take path from image url ('/uploads/57687.jpg')
+                        $path = parse_url($user->image)['path'];
+                        //remove /(slash) from path ('uploads/57687.jpg')
+                        $path = substr($path, 1);
+                        unlink($path);
+                    }
+                    $newImageName = rand().'.'.$request->image->getClientOriginalExtension();
+                    $request->image->move('uploads/', $newImageName);
+                    $data['image'] = $newImageName;
+                }
+                $user->update($data);
+            }
+            else {
+                throw new Exception("Not Found!", 404);
+            }
+            return response()->json([
+                'error' => false,
+                'message' => 'Profile is Updated Successfully',
+                'data' => ['user' => Auth::user()]
+            ], 200);
+        }
+        catch (Exception $e) {
+            $status = $e->getCode() > 500 ? 500 : $e->getCode();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], $status);
+        }
+
     }
 }
